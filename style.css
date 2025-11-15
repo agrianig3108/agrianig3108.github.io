@@ -1,0 +1,678 @@
+/* ----- Variabel Warna & Font ----- */
+:root {
+    --primary-color: #A088D0; /* Lilac Utama */
+    --primary-light: #EAE6F3; /* Lilac Sangat Muda */
+    --bg-color: #fbfaff;      /* Putih Keunguan */
+    --text-color: #443C56;    /* Teks Ungu Tua */
+    --text-light: #79718a;
+    --card-bg: #FFFFFF;
+    
+    /* Border lucu */
+    --border-color-cute: #D9D0EC; 
+
+    /* Sparkle untuk background */
+    --sparkles-small: radial-gradient(circle, var(--primary-light) 1px, transparent 1px);
+    --sparkles-medium: radial-gradient(circle, var(--primary-light) 2px, transparent 2px);
+
+    /* Font 'Baloo 2' yang lucu untuk judul */
+    --font-heading: 'Baloo 2', cursive;
+    --font-body: 'Nunito', sans-serif;
+}
+
+/* ----- Reset & Body ----- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth; /* Efek scroll halus */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body); /* Font body utama */
+    line-height: 1.7;
+    cursor: none;
+    overflow-x: hidden; /* Mencegah 'bocor' saat animasi AOS */
+
+    /* Latar belakang sparkle yang bergerak */
+    background-image: var(--sparkles-small), var(--sparkles-medium);
+    background-size: 50px 50px, 150px 150px;
+    background-position: 0 0, 25px 25px;
+    animation: moveSparkles 60s linear infinite;
+}
+
+/* ----- Kursor Kustom: Bintang ----- */
+.star-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23A088D0' stroke='%23A088D0' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3E%3C/polygon%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease-out;
+}
+
+.star-cursor.hover {
+    transform: translate(-50%, -50%) scale(1.5);
+}
+
+/* ----- Efek Sparkle Trail ----- */
+#sparkle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+.sparkle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23A088D0' stroke='%23A088D0' stroke-width='1'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3E%3C/polygon%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: sparkle-fade 0.8s ease-out forwards;
+}
+
+@keyframes sparkle-fade {
+    0% { opacity: 1; transform: scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: scale(0) rotate(180deg) translate(0, -50px); }
+}
+
+/* ----- Navbar Styling ----- */
+.navbar {
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 0.75rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: box-shadow 0.3s ease;
+}
+
+.navbar:hover {
+    box-shadow: 0 4px 20px rgba(160, 136, 208, 0.15);
+}
+
+.navbar-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.navbar-brand svg {
+    fill: var(--primary-color);
+    stroke: none;
+}
+
+.menu-links {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.menu-links a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 600;
+    padding: 0.5rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: inline-block;
+}
+
+@keyframes subtle-wobble {
+    0%, 100% { transform: rotate(0deg); }
+    33% { transform: rotate(5deg); }
+    66% { transform: rotate(-5deg); }
+}
+
+.menu-links a:hover {
+    color: var(--primary-color);
+    animation: subtle-wobble 0.3s ease-in-out;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+}
+
+.menu-toggle .icon-close { display: none; }
+.menu-toggle.toggled .icon-hamburger { display: none; }
+.menu-toggle.toggled .icon-close { display: block; }
+
+/* ----- Layout Utama & Hero ----- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: var(--primary-light);
+}
+
+.hero h1 {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--text-color);
+}
+
+.hero .tagline {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    margin: 10px 0 25px;
+}
+
+section {
+    padding: 60px 0;
+}
+
+/* ----- Judul Bagian ----- */
+.section-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.section-title .icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-light);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 16px;
+}
+
+.section-title .icon-wrapper svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--primary-color);
+    stroke-width: 1.5;
+}
+
+.section-title h2 {
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    color: var(--text-color);
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* ----- Kartu Keahlian (Skill Card) ----- */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.skill-card {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    padding: 24px;
+    border: 2px dashed var(--border-color-cute);
+    box-shadow: 0 4px 10px rgba(160, 136, 208, 0.08);
+    transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(160, 136, 208, 0.12);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.card-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.star-main {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.star-main svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--primary-color);
+    fill: var(--primary-light);
+}
+
+.tag {
+    display: inline-block;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.skill-level {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--primary-light);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 4px 0 16px;
+}
+
+/* ======================================= */
+/* BARU: LOGIKA TRANSISI PROGRESS BAR      */
+/* ======================================= */
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    border-radius: 4px;
+    
+    /* 1. Mulai dari lebar 0 */
+    width: 0; 
+    
+    /* 2. Animasikan perubahan 'width' selama 1 detik,
+          setelah delay 0.4 detik (agar kartu fade-in dulu) */
+    transition: width 1s ease-out 0.4s; 
+}
+
+/* 3. Saat AOS menganimasi parent (.skill-card),
+      secara otomatis ia akan menambahkan kelas 'aos-animate'.
+      Kita pakai itu untuk memicu animasi progress bar kita.
+*/
+.aos-animate .progress {
+    /* 4. Ambil nilai width dari variabel yang kita set di HTML */
+    width: var(--progress-width, 0); 
+}
+/* ======================================= */
+
+.skill-card p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+/* ----- Timeline (Pengalaman & Pendidikan) ----- */
+.timeline {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10px;
+    height: 100%;
+    width: 3px;
+    background-color: var(--primary-light);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 30px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 5px;
+    width: 18px;
+    height: 18px;
+    background-color: var(--primary-color);
+    border: 3px solid var(--primary-light);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.timeline-item h3 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--text-color);
+}
+
+.perusahaan {
+    display: block;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+/* ----- Kontak & Tombol ----- */
+#kontak {
+    text-align: center;
+}
+
+.tombol {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.tombol:hover {
+    background-color: var(--text-color);
+    transform: scale(1.05);
+}
+
+/* ----- Profil Card Styling ----- */
+.profile-card {
+    background-color: var(--primary-light);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px; 
+    margin: 2rem auto 0; 
+    border: 2px dashed var(--border-color-cute);
+    box-shadow: 0 4px 10px rgba(160, 136, 208, 0.08);
+}
+
+.contact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; 
+}
+
+.contact-list li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.contact-list .icon-wrapper {
+    width: 44px;
+    height: 44px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.contact-list .icon-wrapper svg {
+    stroke: var(--primary-color);
+    stroke-width: 1.5;
+}
+
+.contact-list span {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    word-break: break-all;
+}
+
+/* ----- Info Sertifikat ----- */
+.certificate-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-light); 
+    margin-top: 16px;
+}
+
+.certificate-info + p,
+.progress-bar + p {
+    margin-top: 16px;
+}
+
+/* ----- Form Kontak ----- */
+.contact-form-container {
+    background-color: var(--card-bg);
+    border: 2px dashed var(--border-color-cute);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 40px auto; 
+    box-shadow: 0 4px 10px rgba(160, 136, 208, 0.08);
+}
+
+.form-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid var(--primary-light);
+    padding: 0.5rem 0.2rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-bottom-color: var(--primary-color);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-button {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.submit-button svg {
+    width: 20px;
+    height: 20px;
+    stroke: white;
+}
+
+.kontak-teks {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin: 20px 0 25px;
+    margin-top: 4rem;
+}
+
+/* ----- Footer ----- */
+.site-footer {
+    background-color: var(--primary-light); 
+    color: var(--text-light);
+    text-align: center;
+    padding: 80px 20px 40px; 
+    margin-top: 60px; 
+    position: relative;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; 
+    transform: translateY(-100%); 
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60'%3E%3Cpath fill='%23fbfaff' fill-opacity='1' d='M0,32L1440,32L1440,0C1152,43,288,43,0,0L0,32Z'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.social-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 20px;
+}
+
+.social-links a {
+    color: var(--primary-color); 
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--text-color);
+    transform: scale(1.2) rotate(10deg);
+}
+
+.social-links svg {
+    stroke-width: 1.5; 
+}
+
+.copyright {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.copyright .love {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    fill: var(--primary-color);
+    stroke: none;
+}
+
+/* ----- Navbar Responsif (Mobile) ----- */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; 
+    }
+
+    .menu-links {
+        display: none;
+        position: absolute;
+        top: 60px; 
+        left: 0;
+        width: 100%;
+        background-color: var(--card-bg);
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.05);
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .menu-links.active {
+        display: flex; 
+    }
+
+    .menu-links li {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .menu-links a {
+        padding: 1rem;
+        width: 100%;
+        border-bottom: 1px solid var(--primary-light);
+    }
+    
+    .menu-links li:last-child a {
+        border-bottom: none;
+    }
+    
+    .menu-links a:hover {
+        animation: none;
+        background-color: var(--primary-light);
+    }
+}
+
+/* Keyframes untuk animasi background sparkle */
+@keyframes moveSparkles {
+    from {
+        background-position: 0 0, 0 0;
+    }
+    to {
+        background-position: -500px 500px, -1000px 1000px;
+    }
+}
